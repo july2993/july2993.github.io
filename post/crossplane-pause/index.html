@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Make crossplane keep responsive when having more than one thousand resources per kind - Even - A super concise theme for Hugo</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="july2993" /><meta name="description" content="问题是什么 通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS subnet 要等几分钟才可以观察到 Ready condition 为 True， 预期一个 subnet 应该是可以马上创建好" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.101.0 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/crossplane-pause/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.f92fd13721ddf72129410fd8250e73152cc6f2438082b6c0208dc24ee7c13fc4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Make crossplane keep responsive when having more than one thousand resources per kind" />
+<meta property="og:description" content="问题是什么 通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS subnet 要等几分钟才可以观察到 Ready condition 为 True， 预期一个 subnet 应该是可以马上创建好" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/crossplane-pause/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-02-03T15:25:46+08:00" />
+<meta property="article:modified_time" content="2023-02-03T15:25:46+08:00" />
+
+<meta itemprop="name" content="Make crossplane keep responsive when having more than one thousand resources per kind">
+<meta itemprop="description" content="问题是什么 通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS subnet 要等几分钟才可以观察到 Ready condition 为 True， 预期一个 subnet 应该是可以马上创建好"><meta itemprop="datePublished" content="2023-02-03T15:25:46+08:00" />
+<meta itemprop="dateModified" content="2023-02-03T15:25:46+08:00" />
+<meta itemprop="wordCount" content="2479">
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Make crossplane keep responsive when having more than one thousand resources per kind"/>
+<meta name="twitter:description" content="问题是什么 通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS subnet 要等几分钟才可以观察到 Ready condition 为 True， 预期一个 subnet 应该是可以马上创建好"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Even</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Even</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Make crossplane keep responsive when having more than one thousand resources per kind</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2023-02-03 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#问题是什么">问题是什么</a></li>
+    <li><a href="#问题分析">问题分析</a>
+      <ul>
+        <li><a href="#为什么会堆积">为什么会堆积</a></li>
+        <li><a href="#新建-resource-预期观察到-ready-的延迟">新建 resource 预期观察到 <code>Ready</code> 的延迟</a></li>
+      </ul>
+    </li>
+    <li><a href="#如何解决">如何解决</a>
+      <ul>
+        <li><a href="#增大-maxconcurrentreconciles">增大 MaxConcurrentReconciles</a></li>
+        <li><a href="#增大-poll-interval">增大 poll-interval</a></li>
+        <li><a href="#区分-ready-条件">区分 Ready 条件</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <h1 id="问题是什么">问题是什么</h1>
+<p>通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS <code>subnet</code> 要等几分钟才可以观察到 <code>Ready</code> condition 为 <code>True</code>， 预期一个 <code>subnet</code> 应该是可以马上创建好的。</p>
+<h1 id="问题分析">问题分析</h1>
+<p>我们知道 crossplane 是通过使用 <a href="https://github.com/kubernetes-sigs/controller-runtime">controller-runtime</a> 来实现控制器的，controller-runtime 暴露了一些性能相关 <a href="https://book.kubebuilder.io/reference/metrics-reference.html">metrics</a>, 为了分析问题，我们第一步做的就是抓取 <a href="https://github.com/crossplane-contrib/provider-aws">provider-aws</a> 的 metrics，然后看下相关的监控面板。</p>
+<blockquote>
+<p>crossplane-runtime 是一些 go 的  libraries 给 provider 实现 crossplane 的控制器使用</p>
+<p>对于 AWS 我们使用的 provider 是 provider-aws</p>
+</blockquote>
+<blockquote>
+<p>我们使用的 Dashboard 修改自 <a href="https://grafana.com/grafana/dashboards/15920-controller-runtime-controllers-detail/">https://grafana.com/grafana/dashboards/15920-controller-runtime-controllers-detail/</a></p>
+</blockquote>
+<p><img src="/img/crossplane-workqueue-depth.png" alt="crossplane-workqueue-depth"></p>
+<p><img src="/img/crossplane-subnet.png" alt="crossplane-subnet"></p>
+<p>有了好的观测手段后我们就可以很容易的发现问题，<code>subnet</code> 的队列一直保持在一个很高的值，保持在一千多(每一小时的峰值是触发了 <a href="https://github.com/kubernetes-sigs/controller-runtime/blob/f127c11669de63e97a0e568b53b09362c8735154/pkg/manager/manager.go#L108">SyncPeriod</a>)，但是控制器每秒只能处理不到 10 个，通过简单的计算 <code>workqueue_dept / reconcile rate</code> 我们可以估计一个 resource 从入队到到得到处理需要等待的时间，我们添加了对应的 panel 更加直观的看到这个时间：</p>
+<p><img src="/img/crossplane-estimate-time.png" alt="crossplane-estimate-time"></p>
+<p>可以看到如果新建一个 <code>subnet</code> 要等到它等一次被 reconcile 需要 2.3 多分钟。</p>
+<h2 id="为什么会堆积">为什么会堆积</h2>
+<p>为了解决这个问题，我们首先要理解 crossplane 是如何运作的，crossplane 主要 reconcile 逻辑在 <a href="https://github.com/crossplane/crossplane-runtime">crossplane-runtime</a> 里的 <a href="https://github.com/crossplane/crossplane-runtime/blob/1fc35a41fccae56fdc26f075e737f4a7dc4a7a58/pkg/reconciler/managed/reconciler.go#L637">Reconcile</a>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">observation</span><span class="p">.</span><span class="nx">ResourceUpToDate</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// We did not need to create, update, or delete our external resource.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// Per the below issue nothing will notify us if and when the external
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// resource we manage changes, so we requeue a speculative reconcile
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// after the specified poll interval in order to observe it and react
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// accordingly.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// https://github.com/crossplane/crossplane/issues/289
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">log</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;External resource is up to date&#34;</span><span class="p">,</span> <span class="s">&#34;requeue-after&#34;</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">().</span><span class="nf">Add</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">pollInterval</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">managed</span><span class="p">.</span><span class="nf">SetConditions</span><span class="p">(</span><span class="nx">xpv1</span><span class="p">.</span><span class="nf">ReconcileSuccess</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nx">reconcile</span><span class="p">.</span><span class="nx">Result</span><span class="p">{</span><span class="nx">RequeueAfter</span><span class="p">:</span> <span class="nx">r</span><span class="p">.</span><span class="nx">pollInterval</span><span class="p">},</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nf">Status</span><span class="p">().</span><span class="nf">Update</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">managed</span><span class="p">),</span> <span class="nx">errUpdateManagedStatus</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>看完相关代码，我们发现 crossplane 有个配置 <code>poll-interval</code>,可以通过给 <code>provider-aws </code> 配置 <code>--poll</code> 来控制时间，默认 60s,</p>
+<p>做用是当没事做的时候 requeueAfter 60s 来定时观察 aws 真实状态看是不是需要 update 到预期状态与同步状态到 CR 里,  在 resource 创建好后，每次 reconcile 的逻辑可以简化为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">UpToDate = Observe() # 查 cloud 状态，同步暂停到 status
+</span></span><span class="line"><span class="cl">if !UpToDate {
+</span></span><span class="line"><span class="cl">  UpdateStatueAsExpect()  # 更新 cloud resouces 到预期状态  
+</span></span><span class="line"><span class="cl">} else {
+</span></span><span class="line"><span class="cl">  requeueAfter 60s
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当：</p>
+<p>​		总 resource 个数 / 60 &lt; 每秒能处理的个数</p>
+<p>队列就会开始随着 resource 个数越多堆积越多，对新建的 resoncile 大概需要：</p>
+<p>​	(workqueue_depth / reconcile rate) 秒才能开始 reconcile 一次</p>
+<h2 id="新建-resource-预期观察到-ready-的延迟">新建 resource 预期观察到 <code>Ready</code> 的延迟</h2>
+<p>当我们新建一个 resource 时，<code>Ready</code> 多久为 <code>True</code>可以按下面两类来区分：</p>
+<ul>
+<li>异步创建
+<ul>
+<li>这里指需要等比较久才可用，比如 eks cluster 需要 10 多分钟, 这种通常 cloud 会有个 status 表示 <code>createing</code>, <code>active</code> 之类。crossplane Observe 到云资源状态为 <code>active</code> 的时候 update condition 为 true，我们观察到 <code>Ready</code> 为 true 的 latency 期望值为 <code>poll-interval / 2</code> （正常队列没堆积的情况）。</li>
+</ul>
+</li>
+<li>同步创建
+<ul>
+<li>比如 resourcerecordsets.route53，这种建完就等同可用了，crossplane 也是在 Observe 的时候无异常就无条件设置 <code>Ready</code> 为 true, 新建一个 resouce 处理过程无任何异常的 reconcile 情况如下：
+<ul>
+<li>第一次 Reconcile
+<ul>
+<li>Observe 发现没创建调用 Create() 创建云资源并且 update status(添加 Ready condition 为 false caused by creating) 触发马上 enqueue 。</li>
+</ul>
+</li>
+<li>第二次 Reconcile
+<ul>
+<li>Observe 到云资源写入 Ready condition 为 true,  注意 status 里 atProvider 其它信息也是这个时候写入的, 比如云资源 id, 像我们有些操作需要等在 atProvider 拿到 <code>subnetId</code>， 这种我们观察到 <code>Ready</code> 为 true 的 latency 预期基本没有（秒级， 固定连续两次 reconcile 的时间）。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="如何解决">如何解决</h1>
+<h2 id="增大-maxconcurrentreconciles">增大 MaxConcurrentReconciles</h2>
+<p>既然是处理不过来，我们简单粗暴的方法就是加大并发，默认的 <code>controller-runtime</code> 使用的<code>MaxConcurrentReconciles</code> 是 10，这个可能可以解决一部分 AWS 资源的问题,  但是我们知道 AWS 的很多 API 是有 ratelimit 的，比如 Route 53 相关 API 限制了每秒 5 个请求。</p>
+<blockquote>
+<p>Rate throttling happens when the number of API requests is greater than the hard limit of five requests per second (per account).</p>
+<p><a href="https://aws.amazon.com/premiumsupport/knowledge-center/route-53-avoid-throttling-errors/">https://aws.amazon.com/premiumsupport/knowledge-center/route-53-avoid-throttling-errors/</a></p>
+</blockquote>
+<p>对于 <code>resourcerecordsets.route53</code> 正常情况下我们并不会绕过 crossplane 去修改它，建好后后续 Observer() 预期都是不会有需要去 update 它的，但是它有个 bug 导致设置了 <code>aliasTarget</code> 的实际上每次都去 update 了(ref: <a href="https://github.com/crossplane-contrib/provider-aws/pull/1621">resourcerecordset: Should set AliasTarget when check if it is up to date #1621</a>)。</p>
+<p>假设每次 reconcile 全部触发 update, 那么每次 Reconcile 需要两个 api call, 要满足 60s 的 poll，那么当我们有超过 <strong>150</strong>(5 * 60 / 2) 个 <code>resourcerecordsets.route53</code> 的时候, 队列就会开始堆积，新建的 CR 就没法及时处理。</p>
+<h2 id="增大-poll-interval">增大 poll-interval</h2>
+<p>另一个办法是调大 <code>poll-interval</code> 的值，这个可以解决前文讲的同步创建的资源，但是会导致异步创建的资源我们观察到 <code>Ready</code> 跟在 status 的其它信息的延迟会变长（crossplane 现在只支持全局配置，<a href="https://github.com/crossplane-contrib/provider-aws/pull/1625">provider-aws/pull/1625</a> 尝试支持配置单独 controller)。</p>
+<h2 id="区分-ready-条件">区分 Ready 条件</h2>
+<p>以上的方法都不能通用的解决所有资源类型，能想到的一个通用方法就是区分 <code>Ready</code> 为 True 之前跟之后的 poll interval,  在 creating 的时候我们还是保持 poll-interval 为 60s,  当创建成功 <code>Ready</code> 为 True 后 poll-interval 使用更大的值，为了达到这个目的，有一下三种方法：</p>
+<ol>
+<li>
+<p>修改 <code>crossplane-runtime</code>, 在 resource Ready 后使用不同 poll-interval, 社区有人做 POC: <a href="https://github.com/crossplane-contrib/provider-aws/pull/1625#issuecomment-1380896879">pull/1625#issuecomment-1380896879</a></p>
+</li>
+<li>
+<p>修改 <code>crossplane-runtime</code> 支持使用 annotation 精细控制每个 resouces 的 poll-interval,  我们可以在观察到  <code>Ready</code> 后根据具体情况自己对单个资源设置更大的 poll-interval</p>
+</li>
+<li>
+<p>使用 <code>crossplane.io/paused</code> 间接控制新建 resource 在 <code>Ready</code> 为 true 后不每 60s(poll-interval default value) 就 reconcile 一次</p>
+</li>
+</ol>
+<blockquote>
+<p><a href="https://github.com/crossplane/crossplane-runtime/pull/357">https://github.com/crossplane/crossplane-runtime/pull/357</a></p>
+<p>当添加对应 annotation 后，crossplane 会不在乎 Reconcile 这个 resource.</p>
+</blockquote>
+<p>由于 1 跟 2 都需要修改 crossplane, 而且在刚启动 <code>provider-aws</code> 时会把全部 resources 入队，导致刚启动的时候还是不 responsive, 所以我们选择了 3 解决我们的问题。</p>
+<p>我们不希望每个 crossplane 的用户自己去负责加/删 pause annotation（ready 后加 annotaion，update 了 spec 又要去掉 anntation 之类）。为了统一处理这些逻辑，做到对用户透明，我们可以写个通用的 Reconciler (使用 <a href="https://pkg.go.dev/k8s.io/apimachinery/pkg/apis/meta/v1/unstructured#Unstructured">unstructured#Unstructured</a> 操作）支持全部 crossplane 的 resource kind ，然后 watch 需要处理的 resource kind 跑一个旁路的控制器。</p>
+<p>Reconciler 的实现需要做到：</p>
+<ol>
+<li>
+<p>创建后 Ready &amp; Synced 为 True 的时候通过添加 pause annotation 控制 poll-interval</p>
+</li>
+<li>
+<p>spec updated 了的话需要马上去掉 pause annotation 并且留个窗口期给 crossplane reconcile</p>
+</li>
+<li>
+<p>deleting 的要去掉 pause annotation, 让 crossplane 删除</p>
+</li>
+</ol>
+<p>上面第 2 点里 spec updated 了的话需要马上去掉 pause annotation 这个可以通过在添加 pause annotation 的时候同时保存当前的 spec 在 anntation 里，后续 spec 一被更新了触发 reconcile 的时候我们通过对比就可以知道有变更，这个时间马上去掉 pause annotation 让 corssplane reconcile 到新的预期状态，并且留一个窗口期，在窗口期前不会再次 pause。**但是我们没法保证在重新添加 pause annotation 前 crossplane 已经 reconcile 过了，**在一般情况下队列不堆积 crossplane 也正常运行时是不会有问题的（目前我们很多 crossplane 资源其实应该都不会去 update )。</p>
+<p>完整实现代码在 <a href="https://www.github.com/july2993/crossplane-pause">crossplane-pause</a>。</p>
+<p>在 <code>subnet</code> 开启这个 feature 后，我们可以看到问题解决了，后续新建的 subnet 可以马上得到处理并且看到 <code>Ready</code>。</p>
+<p><img src="/img/crossplane-subnet2.png" alt="crossplane-subnet2"></p>
+<h1 id="总结">总结</h1>
+<p>Crossplane 的 poll-interval 是为了定时同步云上的真实状态，在资源个数少的情况下不会有什么，但是当管理的个数多就会开始处理不过来，并且可能造成过多的 API 请求被 AWS 限流，一般我们通过 crossplane 管理的资源并不会饶过它去云上直接修改，所以在创建成功后并没有必要怎么频繁的去 Reconcile。通过一个旁路的控制器，我们做到了在资源创建好后就停止 Reconcile 来控制 reconcile 的时间， 并且在 spec 更新了的时候马上停止 pause 让 crossplane Reconcile,  做到了用户不感知，不需要修改任何用户代码解决了所有资源类型在个数过多的时候变得不 responsive 的问题。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">july2993</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2023-02-03
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/july2993/july2993" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2023<span class="heart"><i class="iconfont icon-heart"></i></span><span>july2993</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.4ae89da218555efa0e7093a20b92017d2e1202b66fff9fc2edf4cb8d44b44c6e.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
