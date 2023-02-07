@@ -49,7 +49,7 @@
 <meta itemprop="name" content="Make crossplane keep responsive when having more than one thousand resources per kind">
 <meta itemprop="description" content="问题是什么 通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS subnet 要等几分钟才可以观察到 Ready condition 为 True， 预期一个 subnet 应该是可以马上创建好"><meta itemprop="datePublished" content="2023-02-03T15:25:46+08:00" />
 <meta itemprop="dateModified" content="2023-02-03T15:25:46+08:00" />
-<meta itemprop="wordCount" content="2479">
+<meta itemprop="wordCount" content="2471">
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Make crossplane keep responsive when having more than one thousand resources per kind"/>
 <meta name="twitter:description" content="问题是什么 通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS subnet 要等几分钟才可以观察到 Ready condition 为 True， 预期一个 subnet 应该是可以马上创建好"/>
@@ -162,7 +162,7 @@
       <h1 id="问题是什么">问题是什么</h1>
 <p>通过 crossplane 创建的资源随着资源个数增加变得越来越不 responsive, 比如创建一个 AWS <code>subnet</code> 要等几分钟才可以观察到 <code>Ready</code> condition 为 <code>True</code>， 预期一个 <code>subnet</code> 应该是可以马上创建好的。</p>
 <h1 id="问题分析">问题分析</h1>
-<p>我们知道 crossplane 是通过使用 <a href="https://github.com/kubernetes-sigs/controller-runtime">controller-runtime</a> 来实现控制器的，controller-runtime 暴露了一些性能相关 <a href="https://book.kubebuilder.io/reference/metrics-reference.html">metrics</a>, 为了分析问题，我们第一步做的就是抓取 <a href="https://github.com/crossplane-contrib/provider-aws">provider-aws</a> 的 metrics，然后看下相关的监控面板。</p>
+<p>crossplane 是通过使用 <a href="https://github.com/kubernetes-sigs/controller-runtime">controller-runtime</a> 来实现控制器的，controller-runtime 暴露了一些性能相关 <a href="https://book.kubebuilder.io/reference/metrics-reference.html">metrics</a>, 为了分析问题，我们第一步做的就是抓取 <a href="https://github.com/crossplane-contrib/provider-aws">provider-aws</a> 的 metrics，然后看下相关的监控面板。</p>
 <blockquote>
 <p>crossplane-runtime 是一些 go 的  libraries 给 provider 实现 crossplane 的控制器使用</p>
 <p>对于 AWS 我们使用的 provider 是 provider-aws</p>
@@ -176,7 +176,7 @@
 <p><img src="/img/crossplane-estimate-time.png" alt="crossplane-estimate-time"></p>
 <p>可以看到如果新建一个 <code>subnet</code> 要等到它等一次被 reconcile 需要 2.3 多分钟。</p>
 <h2 id="为什么会堆积">为什么会堆积</h2>
-<p>为了解决这个问题，我们首先要理解 crossplane 是如何运作的，crossplane 主要 reconcile 逻辑在 <a href="https://github.com/crossplane/crossplane-runtime">crossplane-runtime</a> 里的 <a href="https://github.com/crossplane/crossplane-runtime/blob/1fc35a41fccae56fdc26f075e737f4a7dc4a7a58/pkg/reconciler/managed/reconciler.go#L637">Reconcile</a>.</p>
+<p>为了解决这个问题，需要先理解 crossplane 是如何运作的，crossplane 主要 reconcile 逻辑在 <a href="https://github.com/crossplane/crossplane-runtime">crossplane-runtime</a> 里的 <a href="https://github.com/crossplane/crossplane-runtime/blob/1fc35a41fccae56fdc26f075e737f4a7dc4a7a58/pkg/reconciler/managed/reconciler.go#L637">Reconcile</a>.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -303,7 +303,7 @@
 <p>在 <code>subnet</code> 开启这个 feature 后，我们可以看到问题解决了，后续新建的 subnet 可以马上得到处理并且看到 <code>Ready</code>。</p>
 <p><img src="/img/crossplane-subnet2.png" alt="crossplane-subnet2"></p>
 <h1 id="总结">总结</h1>
-<p>Crossplane 的 poll-interval 是为了定时同步云上的真实状态，在资源个数少的情况下不会有什么，但是当管理的个数多就会开始处理不过来，并且可能造成过多的 API 请求被 AWS 限流，一般我们通过 crossplane 管理的资源并不会饶过它去云上直接修改，所以在创建成功后并没有必要怎么频繁的去 Reconcile。通过一个旁路的控制器，我们做到了在资源创建好后就停止 Reconcile 来控制 reconcile 的时间， 并且在 spec 更新了的时候马上停止 pause 让 crossplane Reconcile,  做到了用户不感知，不需要修改任何用户代码解决了所有资源类型在个数过多的时候变得不 responsive 的问题。</p>
+<p>Crossplane 的 poll-interval 是为了定时同步云上的真实状态，在资源个数少的情况下不会有什么，但是当管理的个数多就会开始处理不过来，并且可能造成过多的 API 请求被 AWS 限流，一般通过 crossplane 管理的资源并不会饶过它去云上直接修改，所以在创建成功后并没有必要这么频繁的去 Reconcile。通过一个旁路的控制器，我们做到了在资源创建好后就停止 Reconcile 来控制 reconcile 的时间， 并且在 spec 更新了的时候马上停止 pause 让 crossplane Reconcile,  做到了用户不感知，不需要修改任何用户代码解决了所有资源类型在个数过多的时候变得不 responsive 的问题。</p>
 
     </div>
 
