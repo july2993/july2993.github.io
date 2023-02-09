@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Blog to write something</title>
-    <link>https://july2993.github.io/</link>
-    <description>Recent content on Blog to write something</description>
+    <title>crossplane on Blog to write something</title>
+    <link>https://july2993.github.io/tags/crossplane/</link>
+    <description>Recent content in crossplane on Blog to write something</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 03 Feb 2023 15:25:46 +0800</lastBuildDate><atom:link href="https://july2993.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Feb 2023 15:25:46 +0800</lastBuildDate><atom:link href="https://july2993.github.io/tags/crossplane/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Make crossplane keep responsive when having more than one thousand resources per kind</title>
       <link>https://july2993.github.io/post/crossplane-pause/</link>
